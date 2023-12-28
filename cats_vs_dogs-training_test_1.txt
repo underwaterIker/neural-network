@@ -1,0 +1,43 @@
+number of images: 150 (x2)
+image size: (128, 128, 1)
+network.layers = [
+    Convolutional(num_filters=16, kernel_size=3),
+    ReLU(),
+    MaxPooling(2, 2),
+    # Convolutional(num_filters=32, kernel_size=3),
+    # ReLU(),
+    # MaxPooling(2, 2),
+    # Convolutional(num_filters=64, kernel_size=3),
+    # ReLU(),
+    # MaxPooling(2, 2),
+    # Dropout(0.8),
+    Flatten(),
+    Dense(150),
+    ReLU(),
+    Dense(2),
+    Softmax()
+]
+network.train(
+    binary_cross_entropy,
+    binary_cross_entropy_prime,
+    x_train,
+    y_train,
+    batch_size=1,
+    epochs=30,
+    learning_rate=0.001
+)
+
+
+Época 1/30, Pérdida Promedio: 1.0251154988982345
+Época 2/30, Pérdida Promedio: 0.6971411125141125
+Época 3/30, Pérdida Promedio: 0.6900703270714299
+Época 4/30, Pérdida Promedio: 0.6694170961211576
+Época 5/30, Pérdida Promedio: 0.6372144443961462
+Época 6/30, Pérdida Promedio: 0.6069902621539686
+Época 7/30, Pérdida Promedio: 0.563887809750041
+Época 8/30, Pérdida Promedio: 0.5314743447480851
+Época 9/30, Pérdida Promedio: 0.5075511043467675
+Época 10/30, Pérdida Promedio: 0.4571059804399368
+Época 11/30, Pérdida Promedio: 0.4158970058827726
+Época 12/30, Pérdida Promedio: 0.36388673759794793
+Época 13/30, Pérdida Promedio: 0.3152549983454707
