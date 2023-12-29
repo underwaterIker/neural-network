@@ -218,7 +218,6 @@ class Convolutional(Layer):
 class Flatten(Layer):
     def __init__(self):
         self.input_shape = None
-        self.output_shape = None
 
     def forward(self, input):
         self.input_shape = input.shape
@@ -250,7 +249,7 @@ class Softmax(Layer):
         # return self.output
 
     def backward(self, output_gradient, learning_rate):
-        # This version is faster than the one presented in the video
+        # Esta versión es más rápida
         n = np.size(self.output)
         return np.dot((np.identity(n) - self.output.T) * self.output, output_gradient)
         # Original formula:

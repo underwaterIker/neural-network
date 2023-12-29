@@ -23,18 +23,18 @@ def preprocess_data(x, y, limit):
 
 # load MNIST from server, limit to 100 images per class since we're not training on GPU
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
-x_train, y_train = preprocess_data(x_train, y_train, 100)
-x_test, y_test = preprocess_data(x_test, y_test, 100)
+x_train, y_train = preprocess_data(x_train, y_train, 30)
+x_test, y_test = preprocess_data(x_test, y_test, 10)
 
 # neural network
 network = Network()
 network.layers = [
-    Convolutional(num_filters=5, kernel_size=3, initializer='he'),
+    Convolutional(num_filters=3, kernel_size=2, initializer='he'),
     ReLU(), # ReLU gives better results?
     MaxPooling(2, 2),
-    Dropout(0.8),
+    Dropout(1),
     Flatten(),
-    Dense(100, initializer='he'),
+    Dense(20, initializer='he'),
     ReLU(),
     Dense(2, initializer='xavier'),
     Softmax()
@@ -49,6 +49,6 @@ network.train(
     x_test,
     y_test,
     batch_size=1,
-    epochs=1,
-    learning_rate=0.001)
+    epochs=100,
+    learning_rate=0.0001)
 network.save_network('MNIST01_conv_network.csv')
