@@ -137,6 +137,7 @@ class Network:
         plt.subplot(122)
         plt.plot(epochs_plot, accuracy_training_plot, label="Training")
         plt.plot(epochs_plot, accuracy_validation_plot, label="Validation")
+        plt.ylim([0, 100])
         plt.legend()
         plt.xlabel('Epochs')
         plt.ylabel('Average Accuracy (%)')

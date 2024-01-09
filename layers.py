@@ -244,10 +244,6 @@ class Softmax(Layer):
         self.output = exp_input / sum_exp_input
         return self.output
 
-        # tmp = np.exp(input)
-        # self.output = tmp / np.sum(tmp)
-        # return self.output
-
     def backward(self, output_gradient, learning_rate):
         # Esta versión es más rápida
         n = np.size(self.output)
@@ -293,30 +289,6 @@ class MaxPooling(Layer):
 
         return output
 
-        # num_filters = input.shape[2] # depth --> number of filters
-        # output_height = 1 + (input.shape[0] - self.pool_size) // self.stride
-        # output_width = 1 + (input.shape[1] - self.pool_size) // self.stride
-        #
-        # output = np.zeros(shape=(output_height, output_width, num_filters))
-        # self.max_locations = np.zeros_like(input)
-        #
-        # for i in range(0, output_height):
-        #     for j in range(0, output_width):
-        #         vertical_start = i * self.stride
-        #         vertical_end = vertical_start + self.pool_size
-        #         horizontal_start = j * self.stride
-        #         horizontal_end = horizontal_start + self.pool_size
-        #
-        #         pool_region = input[vertical_start:vertical_end, horizontal_start:horizontal_end, :]
-        #
-        #         max_indices = np.unravel_index(np.argmax(pool_region, axis=None), pool_region.shape)
-        #         self.max_locations[vertical_start:vertical_end, horizontal_start:horizontal_end, :] = 0
-        #         self.max_locations[vertical_start + max_indices[0], horizontal_start + max_indices[1], :] = 1
-        #
-        #         output[i, j, :] = np.amax(pool_region, axis=(0, 1))
-        #
-        # return output
-
     def backward(self, output_gradient, learning_rate):
         output_height, output_width, filters = output_gradient.shape
 
@@ -329,41 +301,8 @@ class MaxPooling(Layer):
                     i_dinput, j_dinput, f_dinput = self.max_locations[counter]
                     dinput[i_dinput, j_dinput, f_dinput] = output_gradient[i, j, f]
                     counter += 1
-        # print(output_gradient[0])
-        # print(dinput[0])
-
-
-        # for i in range(0, len(self.max_locations)):
-        #     output_filter_index = self.max_locations[i][0]
-        #     output_height_index = 1 + (self.max_locations[i][1] - self.pool_size) // self.stride
-        #     output_width_index = 1 + (self.max_locations[i][2] - self.pool_size) // self.stride
-        #     dinput[self.max_locations[i]] = output_gradient[output_filter_index, output_height_index, output_width_index]
 
         return dinput
-
-        # dinput = np.zeros_like(self.max_locations)
-        #
-        # for c in range(self.max_locations.shape[0]):
-        #     for i in range(self.max_locations.shape[1]):
-        #         i_doutput = 1 + (i - self.pool_size) // self.stride
-        #         for j in range(self.max_locations.shape[2]):
-        #             j_doutput = 1 + (j - self.pool_size) // self.stride
-        #             if self.max_locations[c, i, j] == 1:
-        #                 dinput[c, i, j] = output_gradient[c, i_doutput, j_doutput]
-        #
-        # return dinput
-
-        # dinput = np.zeros_like(self.max_locations)
-        #
-        # for i in range(self.max_locations.shape[0]):
-        #     i_doutput = 1 + (i - self.pool_size) // self.stride
-        #     for j in range(self.max_locations.shape[1]):
-        #         j_doutput = 1 + (j - self.pool_size) // self.stride
-        #         for c in range(self.max_locations.shape[2]):
-        #             if self.max_locations[i, j, c] == 1:
-        #                 dinput[i, j, c] = output_gradient[i_doutput, j_doutput, c]
-        #
-        # return dinput
 
     def save_layer(self, csv_writer):
         first_row = [__name__+'.'+type(self).__name__+'('+ str(self.pool_size)+', '+ str(self.stride)+')']

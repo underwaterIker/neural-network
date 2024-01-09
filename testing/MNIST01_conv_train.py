@@ -32,7 +32,7 @@ network.layers = [
     Convolutional(num_filters=3, kernel_size=2, initializer='he'),
     ReLU(), # ReLU gives better results?
     MaxPooling(2, 2),
-    Dropout(1),
+    Dropout(0.5),
     Flatten(),
     Dense(20, initializer='he'),
     ReLU(),

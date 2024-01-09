@@ -2,8 +2,6 @@ import numpy as np
 import cv2
 import zipfile
 import os
-import matplotlib.pyplot as plt
-from PIL import Image
 
 from layers import Dense, Convolutional, Flatten, MaxPooling, Dropout, Softmax
 from activations import Sigmoid, ReLU
@@ -28,21 +26,10 @@ def preprocess_data(datos, image_size):
     return x, y
 
 
-# load Dataset
+# LOAD DATASET: training
 if os.path.exists('../datasets/cats_vs_dogs_Dataset') is False:
     with zipfile.ZipFile('../datasets/cats_vs_dogs_Dataset.zip', 'r') as f:
         f.extractall(path='../datasets/')
-
-# img = Image.open('../datasets/cats_vs_dogs_Dataset/Cat/0.jpg')
-# # img.load()
-# data = np.asarray(img, dtype='int32')
-# print(data.shape)
-# plt.figure()
-# plt.imshow(img)
-# plt.show()
-# cat_img = cv2.imread('../datasets/cats_vs_dogs_Dataset/Cat/0.jpg')
-# print('jjjjjjjjjjjjjjjjjjjjjjjjjjjj')
-# print(cat_img.shape)
 
 x = []
 y = []
@@ -54,10 +41,6 @@ for i, (image) in enumerate(os.listdir('../datasets/cats_vs_dogs_Dataset/Cat')):
         cat_img = cv2.resize(cat_img, (128, 128))
         cat_img = cat_img.reshape((128, 128, 1))
 
-        # plt.figure()
-        # plt.imshow(cat_img, cmap='gray')
-        # plt.show()
-
         x.append(cat_img)
         y.append([[0], [1]])
     except:
@@ -68,10 +51,6 @@ for i, (image) in enumerate(os.listdir('../datasets/cats_vs_dogs_Dataset/Cat')):
         dog_img = cv2.imread('../datasets/cats_vs_dogs_Dataset/Dog/' + image, cv2.IMREAD_GRAYSCALE)
         dog_img = cv2.resize(dog_img, (128, 128))
         dog_img = dog_img.reshape((128, 128, 1))
-
-        # plt.figure()
-        # plt.imshow(dog_img, cmap='gray')
-        # plt.show()
 
         x.append(dog_img)
         y.append([[1], [0]])
@@ -85,6 +64,7 @@ p = np.random.permutation(len(x_train))
 x_train, y_train = x_train[p], y_train[p]
 
 
+# LOAD DATASET: validation
 x = []
 y = []
 for i, (image) in enumerate(reversed(os.listdir('../datasets/cats_vs_dogs_Dataset/Cat'))):
@@ -94,10 +74,6 @@ for i, (image) in enumerate(reversed(os.listdir('../datasets/cats_vs_dogs_Datase
         cat_img = cv2.imread('../datasets/cats_vs_dogs_Dataset/Cat/'+image, cv2.IMREAD_GRAYSCALE)
         cat_img = cv2.resize(cat_img, (128, 128))
         cat_img = cat_img.reshape((128, 128, 1))
-
-        # plt.figure()
-        # plt.imshow(cat_img, cmap='gray')
-        # plt.show()
 
         x.append(cat_img)
         y.append([[0], [1]])
@@ -109,10 +85,6 @@ for i, (image) in enumerate(reversed(os.listdir('../datasets/cats_vs_dogs_Datase
         dog_img = cv2.imread('../datasets/cats_vs_dogs_Dataset/Dog/' + image, cv2.IMREAD_GRAYSCALE)
         dog_img = cv2.resize(dog_img, (128, 128))
         dog_img = dog_img.reshape((128, 128, 1))
-
-        # plt.figure()
-        # plt.imshow(dog_img, cmap='gray')
-        # plt.show()
 
         x.append(dog_img)
         y.append([[1], [0]])
@@ -129,20 +101,19 @@ x_validation, y_validation = x_validation[p], y_validation[p]
 print('Dataset loaded!')
 
 
-
 # neural network
 network = Network()
 network.layers = [
     Convolutional(num_filters=16, kernel_size=3, initializer='he'),
     ReLU(),
     MaxPooling(2, 2),
-    # Convolutional(num_filters=32, kernel_size=3, initializer='he'),
-    # ReLU(),
-    # MaxPooling(2, 2),
-    # Convolutional(num_filters=64, kernel_size=3, initializer='he'),
-    # ReLU(),
-    # MaxPooling(2, 2),
-    # Dropout(0.8),
+    Convolutional(num_filters=32, kernel_size=3, initializer='he'),
+    ReLU(),
+    MaxPooling(2, 2),
+    Convolutional(num_filters=64, kernel_size=3, initializer='he'),
+    ReLU(),
+    MaxPooling(2, 2),
+    Dropout(0.8),
     Flatten(),
     Dense(150, initializer='he'),
     ReLU(),

@@ -13,12 +13,12 @@ def preprocess_data(x, y, limit):
     # e.g. number 3 will become [0, 0, 0, 1, 0, 0, 0, 0, 0, 0]
     y = to_categorical(y)
     y = y.reshape(y.shape[0], 10, 1)
-    return x[:limit], y[:limit]
+    return x[200:200+limit], y[200:200+limit]
 
 
 # load MNIST from server
 (x_train, y_train), (x_test, y_test) = mnist.load_data()
-x_test, y_test = preprocess_data(x_test, y_test, 20)
+x_test, y_test = preprocess_data(x_test, y_test, 10)
 
 # load the already trained network
 myNetwork = load_network('MNIST_dense_network.csv')

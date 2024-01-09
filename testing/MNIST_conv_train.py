@@ -44,7 +44,7 @@ network.train(
     x_test,
     y_test,
     batch_size=1,
-    epochs=20,
-    learning_rate=0.1
+    epochs=100,
+    learning_rate=0.05
 )
 network.save_network('MNIST_conv_network.csv')
